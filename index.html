@@ -1082,39 +1082,20 @@ body::after{
 
   function buildMark(host){
     var variant=host.getAttribute('data-spiral');
-    var inOrbit=(variant==='orbit');
-    var stroke,sw,withRing,size;
-    if(variant==='orbit'){stroke='oklch(0.965 0.01 190)';sw=2.4;withRing=true;size=null;}
-    else if(variant==='candle'){stroke='var(--candle)';sw=8;withRing=true;size=100;}
-    else if(variant==='teal'){stroke='var(--teal-600)';sw=7;withRing=true;size=100;}
-    else if(variant==='light-lg'){stroke='oklch(0.965 0.01 190)';sw=4;withRing=true;size=200;}
-    else {stroke='oklch(0.965 0.01 190)';sw=8;withRing=true;size=100;} /* light (nav/footer) */
-    var paths=spiralPaths(inOrbit?{rIn:8,rOut:52,turns:1.2}:{rIn:9,rOut:40,turns:1.12});
-    var g, target;
-    if(inOrbit){ // host is a static positioning <g>; rotation lives on an inner group so the animated transform never clobbers the translate
-      if(reduce){ target=host; }
-      else { var spinner=svgEl('g',{'class':'spin-slow'}); spinner.style.animationDuration=host.getAttribute('data-spin')||'150s'; host.appendChild(spinner); target=spinner; }
+    if(variant==='orbit'){
+      // host is a <g> inside an SVG, so use an SVG <image> element
+      var im=svgEl('image',{href:'img/favicon.png',x:-55,y:-55,width:110,height:110});
+      host.appendChild(im);
     } else {
-      var svg=svgEl('svg',{viewBox:'-55 -55 110 110',fill:'none',role:'img','aria-hidden':'true'});
-      svg.style.width='100%';svg.style.height='100%';
-      target=svgEl('g',{}); svg.appendChild(target); host.appendChild(svg);
+      var img=document.createElement('img');
+      img.src='img/favicon.png';
+      img.alt='';
+      img.style.width='100%';
+      img.style.height='100%';
+      img.style.display='block';
+      img.style.objectFit='contain';
+      host.appendChild(img);
     }
-    var rOut=inOrbit?52:40;
-    if(withRing){
-      var ring=svgEl('circle',{cx:0,cy:0,r:(rOut+ (inOrbit?6:8)),fill:'none',stroke:stroke,'stroke-width':sw*0.7,opacity:inOrbit?0.5:0.85});
-      if(!reduce){ring.setAttribute('class','spiral-path');ring.setAttribute('pathLength','1');ring.style.setProperty('--len','1');}
-      target.appendChild(ring);
-    }
-    paths.forEach(function(d,idx){
-      var p=svgEl('path',{d:d,fill:'none',stroke:stroke,'stroke-width':sw,'stroke-linecap':'round'});
-      if(!reduce){
-        p.setAttribute('class','spiral-path'+(idx===1?' a2':idx===2?' a3':''));
-        var len=p.getTotalLength?0:0; // set after attach
-        p.style.setProperty('--len','520');
-      }
-      target.appendChild(p);
-      if(!reduce && p.getTotalLength){var L=p.getTotalLength();p.style.setProperty('--len',L.toFixed(0));}
-    });
   }
   document.querySelectorAll('[data-spiral]').forEach(buildMark);
 
