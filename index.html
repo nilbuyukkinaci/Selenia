@@ -1551,7 +1551,7 @@ body::after{
   /* ---------- waitlist ---------- */
   var form=document.getElementById('waitlist-form');
   /* Point this at your deployed waitlist server (see server/README.md). */
-  var WAITLIST_API='https://selenia-waitlist-server.onrender.com';
+  var WAITLIST_API='https://selenia-waitlist-server.onrender.com/api/waitlist';
   var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(form){form.addEventListener('submit',function(e){e.preventDefault();
     var inp=document.getElementById('wl-email'), err=document.getElementById('wl-error');
