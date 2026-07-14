@@ -1550,17 +1550,43 @@ body::after{
 
   /* ---------- waitlist ---------- */
   var form=document.getElementById('waitlist-form');
+  /* Point this at your deployed waitlist server (see server/README.md). */
+  var WAITLIST_API='https://selenia-waitlist-server.onrender.com';
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(form){form.addEventListener('submit',function(e){e.preventDefault();
     var inp=document.getElementById('wl-email'), err=document.getElementById('wl-error');
+    var btn=form.querySelector('button[type="submit"]');
     var email=inp.value.trim();
-    if(!email||email.indexOf('@')<1||email.indexOf('.')<email.indexOf('@')){
-      inp.setAttribute('aria-invalid','true'); if(err)err.hidden=false; inp.focus(); return;
+
+    if(!EMAIL_RE.test(email)){
+      if(err){err.textContent='Please enter a valid email address.'; err.hidden=false;}
+      inp.setAttribute('aria-invalid','true'); inp.focus(); return;
     }
     inp.removeAttribute('aria-invalid'); if(err)err.hidden=true;
-    var inner=form.closest('.closing-inner');
-    inner.classList.add('is-done');
-    var sec=form.closest('.closing'); if(sec){sec.classList.remove('is-rewarding');void sec.offsetWidth;sec.classList.add('is-rewarding');}
-    var ok=inner.querySelector('.waitlist-success'); if(ok)ok.focus();
+    if(btn)btn.disabled=true;
+
+    fetch(WAITLIST_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email})
+    }).then(function(r){return r.json().catch(function(){return {};}).then(function(data){return {status:r.status,data:data};});})
+      .then(function(res){
+        if(btn)btn.disabled=false;
+        if(res.status>=400||!res.data||res.data.ok===false){
+          if(err){err.textContent='Something went wrong. Please try again.'; err.hidden=false;}
+          inp.focus();
+          return;
+        }
+        var inner=form.closest('.closing-inner');
+        inner.classList.add('is-done');
+        var sec=form.closest('.closing'); if(sec){sec.classList.remove('is-rewarding');void sec.offsetWidth;sec.classList.add('is-rewarding');}
+        var ok=inner.querySelector('.waitlist-success'); if(ok)ok.focus();
+      })
+      .catch(function(){
+        if(btn)btn.disabled=false;
+        if(err){err.textContent='Could not connect. Please check your connection and try again.'; err.hidden=false;}
+        inp.focus();
+      });
   });}
 })();
 </script>
