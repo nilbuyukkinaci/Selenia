@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Selenia: a daily planner that moves the way you do</title>
 <meta name="description" content="Selenia is an adaptive daily splanner for women, built around your real energy, mood, and cycle. Calm, intelligent, made for how you live. Not a tracker. Not a hustle app." />
-<link rel="icon" href="img/selenia3.png" type="image/png" />
+<link rel="icon" href="img/seleniaicon1.png" type="image/png" />
 <link rel="stylesheet" href="fonts/fonts.css" />
 <style>
 /* ============================== TOKENS ============================== */
@@ -1084,11 +1084,11 @@ body::after{
     var variant=host.getAttribute('data-spiral');
     if(variant==='orbit'){
       // host is a <g> inside an SVG, so use an SVG <image> element
-      var im=svgEl('image',{href:'img/selenia3.png',x:-55,y:-55,width:110,height:110});
+      var im=svgEl('image',{href:'img/seleniaicon1.png',x:-55,y:-55,width:110,height:110});
       host.appendChild(im);
     } else {
       var img=document.createElement('img');
-      img.src='img/selenia3.png';
+      img.src='img/seleniaicon1.png';
       img.alt='';
       img.style.width='100%';
       img.style.height='100%';
@@ -1551,7 +1551,7 @@ body::after{
   /* ---------- waitlist ---------- */
   var form=document.getElementById('waitlist-form');
   /* Point this at your deployed waitlist server (see server/README.md). */
-  var WAITLIST_API='https://selenia-waitlist-server.onrender.com/api/waitlist';
+  var WAITLIST_API='https://selenia-waitlist-server.onrender.com';
   var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(form){form.addEventListener('submit',function(e){e.preventDefault();
     var inp=document.getElementById('wl-email'), err=document.getElementById('wl-error');
