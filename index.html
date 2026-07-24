@@ -1551,7 +1551,7 @@ body::after{
   /* ---------- waitlist ---------- */
   var form=document.getElementById('waitlist-form');
   /* Point this at your deployed waitlist server (see server/README.md). */
-  var WAITLIST_API='https://selenia-waitlist-server.onrender.com';
+  var WAITLIST_API='https://script.google.com/macros/s/AKfycbxgaAuJALycIDZ-uj2LfVoSRch0aLiDZUba8s7Xpga2h2yZ6RMRq6hypK8Hkp_kLlMQEQ/exec';
   var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(form){form.addEventListener('submit',function(e){e.preventDefault();
     var inp=document.getElementById('wl-email'), err=document.getElementById('wl-error');
@@ -1567,7 +1567,7 @@ body::after{
 
     fetch(WAITLIST_API,{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
       body:JSON.stringify({email:email})
     }).then(function(r){return r.json().catch(function(){return {};}).then(function(data){return {status:r.status,data:data};});})
       .then(function(res){
